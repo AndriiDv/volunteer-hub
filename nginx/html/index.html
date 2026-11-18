@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volunteer Hub | Платформа Дружніх Банок</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .bg-grid {
+      background-size: 40px 40px;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col bg-grid">
+  <!-- Navbar -->
+  <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-yellow-400 flex items-center justify-center font-black text-slate-950 text-xl shadow-lg shadow-blue-500/20">
+          VH
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            Volunteer Hub
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">MVP 1.0</span>
+          </h1>
+          <p class="text-xs text-slate-400">Платформа координації зборів та дружніх банок</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="/docs" target="_blank" class="px-4 py-2 text-sm font-semibold rounded-lg bg-blue-600 hover:bg-blue-500 transition text-white shadow-md shadow-blue-600/30 flex items-center gap-2">
+          <span>Swagger Docs</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+        </a>
+        <a href="/api/needs" target="_blank" class="px-4 py-2 text-sm font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 transition text-slate-200 border border-slate-700">
+          API: /needs
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="flex-1 max-w-7xl mx-auto px-6 py-12 flex flex-col justify-center">
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        Backend & Infrastructure Live in eu-north-1
+      </div>
+      <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight mb-6">
+        Об'єднуємо сили заради <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-yellow-300 to-yellow-500">Перемоги</span>
+      </h2>
+      <p class="text-slate-300 text-lg leading-relaxed mb-8">
+        Верифіковані потреби бойових підрозділів ЗСУ розбиваються на комфортні «Дружні банки» для волонтерів із прозорими звітами через Amazon S3 та рейтингом довіри.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a href="/docs" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold shadow-lg shadow-blue-500/25 hover:from-blue-500 hover:to-blue-400 transition flex items-center gap-2">
+          <span>Тестувати API в Swagger</span>
+          <span>&rarr;</span>
+        </a>
+        <a href="/api/leaderboard" target="_blank" class="px-6 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-200 font-semibold border border-slate-700 transition">
+          Лідерборд волонтерів
+        </a>
+      </div>
+    </div>
+
+    <!-- Features / Teammates Contract Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <!-- Card 1 -->
+      <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition">
+        <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-4 text-xl">
+          🎯
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Верифікація Потреб</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Військові частини створюють запити на FPV-дрони, РЕБ, авто та такмед. Підтвердження облікових записів адміністратором.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition">
+        <div class="w-12 h-12 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center mb-4 text-xl">
+          🏺
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Дружні Банки (Jars)</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Волонтери беруть частку великого збору, підключають свої Monobank/PrivatBank банки та підтверджують збори скріншотами.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition">
+        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4 text-xl">
+          💻
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Frontend Quickstart</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Фронтенд розробникам: ініціалізуйте React + Vite + Tailwind у папці <code class="text-yellow-400 bg-slate-800 px-1 py-0.5 rounded text-xs">frontend/</code>. Усі запити проксуються на <code class="text-blue-400 bg-slate-800 px-1 py-0.5 rounded text-xs">/api</code>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Live Status / Demo Accounts -->
+    <div class="p-6 rounded-2xl bg-slate-900/40 border border-slate-800/80">
+      <h4 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-4">Демо-аккаунти для тестування (пароль: <code class="text-yellow-400 font-mono">Volunteer2026!</code>)</h4>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
+        <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+          <div class="text-slate-400 mb-1">👑 Адміністратор</div>
+          <div class="text-white font-semibold">admin@volunteerhub.ua</div>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+          <div class="text-slate-400 mb-1">🪖 47 ОМБр "Маґура"</div>
+          <div class="text-white font-semibold">magura47@military.ua</div>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+          <div class="text-slate-400 mb-1">🤝 Волонтер Сергій</div>
+          <div class="text-white font-semibold">serhiy@volunteers.ua</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>Volunteer Hub MVP &bull; Слава Україні! 🇺🇦</div>
+      <div class="flex items-center gap-4">
+        <a href="/docs" class="hover:text-slate-400 transition">API Docs</a>
+        <a href="/api/health" class="hover:text-slate-400 transition">System Health</a>
+        <a href="https://github.com/AndriiDv/volunteer-hub" target="_blank" class="hover:text-slate-400 transition">GitHub Repo</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
