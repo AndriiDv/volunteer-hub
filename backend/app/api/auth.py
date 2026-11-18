@@ -26,8 +26,8 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
     user = User(
         email=user_in.email,
         password_hash=hash_password(user_in.password),
-        full_name=user_in.full_name,
-        role=user_in.role,
+        full_name=user_in.full_name or user_in.email.split("@")[0],
+        role=user_in.role or "volunteer",
         unit_name=user_in.unit_name if user_in.role == "military" else None,
         is_verified=is_verified,
         points=0
@@ -35,7 +35,20 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
-    return user
+
+    token = create_access_token(subject=user.id, role=user.role)
+    return {
+        "id": user.id,
+        "email": user.email,
+        "full_name": user.full_name,
+        "role": user.role,
+        "unit_name": user.unit_name,
+        "is_verified": user.is_verified,
+        "points": user.points,
+        "created_at": user.created_at,
+        "access_token": token,
+        "token_type": "bearer",
+    }
 
 @router.post("/login", response_model=Token)
 async def login(
@@ -53,18 +66,19 @@ async def login(
     else:
         try:
             body = await request.json()
-            email = body.get("email") or body.get("username")
-            password = body.get("password")
+            if isinstance(body, dict):
+                email = body.get("email") or body.get("username")
+                password = body.get("password")
         except Exception:
             pass
 
     if not email or not password:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Email and password are required."
         )
 
-    user = db.query(User).filter(User.email == email).first()
+    user = db.query(User).filter(User.email == str(email).strip()).first()
     if not user or not verify_password(password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -87,9 +101,16 @@ def sign_in_with_google(
     """
     Verify Google ID token and authenticate or register user.
     """
+    token_str = auth_in.id_token or auth_in.credential or auth_in.token
+    if not token_str:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="id_token or credential is required."
+        )
+
     try:
         id_info = id_token.verify_oauth2_token(
-            auth_in.id_token,
+            token_str,
             google_requests.Request(),
             settings.GOOGLE_CLIENT_ID
         )

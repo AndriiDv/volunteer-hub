@@ -104,7 +104,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }) => {
     const res = await api.register(payload);
     if (res.access_token) {
-      await syncUserProfile(res.access_token, res.user);
+      const userObj = res.user || (('id' in res) ? (res as unknown as User) : undefined);
+      await syncUserProfile(res.access_token, userObj);
     } else {
       await login(payload.email, payload.password);
     }

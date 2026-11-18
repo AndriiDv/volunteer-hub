@@ -124,7 +124,7 @@ export const api = {
   async login(email: string, password: string): Promise<{ access_token: string; user?: User }> {
     return request('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email: email.trim(), password }),
     });
   },
 
@@ -134,17 +134,30 @@ export const api = {
     full_name: string;
     role: 'volunteer' | 'military';
     unit_name?: string;
-  }): Promise<{ access_token?: string; user?: User }> {
+  }): Promise<{ access_token?: string; user?: User; [key: string]: unknown }> {
+    const fullName = payload.full_name || (payload as Record<string, unknown>).name || payload.email.split('@')[0];
     return request('/auth/register', {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        email: payload.email.trim(),
+        password: payload.password,
+        full_name: String(fullName).trim(),
+        name: String(fullName).trim(),
+        role: payload.role || 'volunteer',
+        unit_name: payload.unit_name?.trim() || null,
+      }),
     });
   },
 
   async googleLogin(credential: string): Promise<{ access_token: string; user?: User }> {
     return request('/auth/google', {
       method: 'POST',
-      body: JSON.stringify({ token: credential, credential }),
+      body: JSON.stringify({
+        id_token: credential,
+        credential,
+        token: credential,
+        role: 'volunteer',
+      }),
     });
   },
 
