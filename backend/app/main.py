@@ -13,9 +13,19 @@ app = FastAPI(
 )
 
 # CORS configuration
+allowed_origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://13.60.170.196",
+    "http://volunteer-hub.duckdns.org",
+    "https://volunteer-hub.duckdns.org",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"https?://.*\.duckdns\.org",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
