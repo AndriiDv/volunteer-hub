@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     AWS_DEFAULT_REGION: str = os.getenv("AWS_DEFAULT_REGION", "eu-north-1")
     S3_BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME", "volunteer-hub-media-andriidv")
 
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = os.getenv(
+        "GOOGLE_CLIENT_ID", 
+        "921149802430-77d460raj6hhtomlqq7sosfvcgsergtt.apps.googleusercontent.com"
+    )
+
     class Config:
         case_sensitive = True
         env_file = ".env"

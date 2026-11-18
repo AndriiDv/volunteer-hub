@@ -15,6 +15,10 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+class GoogleAuthRequest(BaseModel):
+    id_token: str
+    role: Optional[Literal["volunteer", "military"]] = "volunteer"
+
 class UserOut(UserBase):
     id: int
     is_verified: bool

@@ -92,7 +92,44 @@ Authenticate user and obtain a JWT Bearer access token. Accepts either JSON payl
 
 ---
 
-### 2.3 Current User Profile
+### 2.3 Sign in with Google
+`POST /api/auth/google`
+
+Authenticate or register a user using a Google Identity Services ID Token (`credential` provided by `@react-oauth/google`).
+
+**Google OAuth Client ID:**
+`921149802430-77d460raj6hhtomlqq7sosfvcgsergtt.apps.googleusercontent.com`
+
+#### Request Body (JSON)
+```json
+{
+  "id_token": "<google_id_token_jwt>",
+  "role": "volunteer"
+}
+```
+*Note: `role` is optional (`volunteer` | `military`, defaults to `"volunteer"`). If the user does not exist in the database yet, an account is automatically provisioned with this role and `is_verified=false`.*
+
+#### Response `200 OK`
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "bearer",
+  "user": {
+    "id": 7,
+    "email": "andrii@gmail.com",
+    "full_name": "Andrii Dv",
+    "role": "volunteer",
+    "unit_name": null,
+    "is_verified": false,
+    "points": 0,
+    "created_at": "2026-11-18T07:15:00Z"
+  }
+}
+```
+
+---
+
+### 2.4 Current User Profile
 `GET /api/auth/me`
 
 Retrieve profile of currently authenticated user.

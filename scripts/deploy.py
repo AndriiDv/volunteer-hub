@@ -97,6 +97,7 @@ AWS_ACCESS_KEY_ID={aws_id}
 AWS_SECRET_ACCESS_KEY={aws_secret}
 AWS_DEFAULT_REGION={aws_region}
 S3_BUCKET_NAME=volunteer-hub-media-andriidv
+GOOGLE_CLIENT_ID=921149802430-77d460raj6hhtomlqq7sosfvcgsergtt.apps.googleusercontent.com
 """
     write_env_cmd = f"cat << 'EOF' > /home/ubuntu/volunteer-hub/.env\n{env_content}EOF"
     run_ssh(write_env_cmd, ip, key_path)

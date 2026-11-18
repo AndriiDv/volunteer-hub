@@ -57,7 +57,72 @@ Add the Tailwind directives to `./src/index.css`:
 
 ### 3. Recommended Additional Packages
 ```bash
-npm install lucide-react axios clsx tailwind-merge react-router-dom
+npm install lucide-react axios clsx tailwind-merge react-router-dom @react-oauth/google
+```
+
+---
+
+## 🔑 Google Authentication Integration (`@react-oauth/google`)
+
+Volunteer Hub supports **"Sign in with Google"** out of the box via `POST /api/auth/google`.
+
+**Google OAuth Client ID:**
+```
+921149802430-77d460raj6hhtomlqq7sosfvcgsergtt.apps.googleusercontent.com
+```
+
+### 1. Wrap Application with `GoogleOAuthProvider`
+In `src/main.tsx` or `src/App.tsx`:
+```tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import App from './App';
+import './index.css';
+
+const GOOGLE_CLIENT_ID = "921149802430-77d460raj6hhtomlqq7sosfvcgsergtt.apps.googleusercontent.com";
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <App />
+    </GoogleOAuthProvider>
+  </React.StrictMode>
+);
+```
+
+### 2. Add Google Login Button
+In your Login / Register component:
+```tsx
+import { GoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+
+export function GoogleAuthButton({ onLoginSuccess }: { onLoginSuccess: (user: any) => void }) {
+  const handleSuccess = async (credentialResponse: any) => {
+    try {
+      const res = await axios.post('/api/auth/google', {
+        id_token: credentialResponse.credential,
+        role: 'volunteer', // or 'military'
+      });
+      localStorage.setItem('token', res.data.access_token);
+      onLoginSuccess(res.data.user);
+    } catch (err) {
+      console.error('Google sign-in error:', err);
+    }
+  };
+
+  return (
+    <div className="flex justify-center my-4">
+      <GoogleLogin
+        onSuccess={handleSuccess}
+        onError={() => console.error('Login Failed')}
+        theme="filled_black"
+        shape="pill"
+        text="continue_with"
+      />
+    </div>
+  );
+}
 ```
 
 ---

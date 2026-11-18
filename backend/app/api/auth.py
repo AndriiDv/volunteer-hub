@@ -1,9 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+
+from app.core.config import settings
 from app.core.database import get_db
 from app.core.security import hash_password, verify_password, create_access_token
 from app.models.user import User
-from app.schemas.user import UserCreate, UserLogin, UserOut, Token
+from app.schemas.user import UserCreate, UserLogin, GoogleAuthRequest, UserOut, Token
 from app.api.deps import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -67,6 +71,60 @@ async def login(
             detail="Invalid email or password.",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+    token = create_access_token(subject=user.id, role=user.role)
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": user
+    }
+
+@router.post("/google", response_model=Token)
+def sign_in_with_google(
+    auth_in: GoogleAuthRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Verify Google ID token and authenticate or register user.
+    """
+    try:
+        id_info = id_token.verify_oauth2_token(
+            auth_in.id_token,
+            google_requests.Request(),
+            settings.GOOGLE_CLIENT_ID
+        )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Invalid Google ID token: {str(e)}",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    email = id_info.get("email")
+    if not email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Google token does not contain an email address."
+        )
+
+    full_name = id_info.get("name") or email.split("@")[0]
+
+    # Find or create user
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        chosen_role = auth_in.role if auth_in.role in ["volunteer", "military"] else "volunteer"
+        user = User(
+            email=email,
+            password_hash=None,
+            full_name=full_name,
+            role=chosen_role,
+            unit_name=None,
+            is_verified=False,
+            points=0
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
 
     token = create_access_token(subject=user.id, role=user.role)
     return {

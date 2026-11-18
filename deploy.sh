@@ -81,6 +81,7 @@ AWS_ACCESS_KEY_ID=$AWS_KEY
 AWS_SECRET_ACCESS_KEY=$AWS_SEC
 AWS_DEFAULT_REGION=$AWS_REG
 S3_BUCKET_NAME=$S3_BUCKET
+GOOGLE_CLIENT_ID=921149802430-77d460raj6hhtomlqq7sosfvcgsergtt.apps.googleusercontent.com
 EOF"
 
 echo "[*] Building and starting Docker containers..."
